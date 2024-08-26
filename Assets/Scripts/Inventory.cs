@@ -22,14 +22,17 @@ public class Inventory : MonoBehaviour
 
     private void testInitItemSlotList()
     {
+        hotbar.Clear();
+        armorSlots.Clear();
+        itemSlots.Clear();
+        weaponSlots.Clear();
+
         initializeItemSlotList(hotbar, hotbarGO);
         initializeItemSlotList(armorSlots, armorSlotsGO);
         initializeItemSlotList(itemSlots, itemSlotsGO);
         initializeItemSlotList(weaponSlots, weaponSlotsGO);
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         initializeItemSlotList(hotbar, hotbarGO);
@@ -44,11 +47,5 @@ public class Inventory : MonoBehaviour
         {
             itemSlots.Add(itemSlot);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
