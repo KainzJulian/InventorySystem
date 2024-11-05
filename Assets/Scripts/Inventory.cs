@@ -7,45 +7,51 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
 
-    public GameObject hotbarGO;
-    public GameObject armorSlotsGO;
-    public GameObject itemSlotsGO;
-    public GameObject weaponSlotsGO;
+    public int inventorySlots;
 
-    public List<ItemSlot> hotbar = new();
-    public List<ItemSlot> armorSlots = new();
-    public List<ItemSlot> itemSlots = new();
-    public List<ItemSlot> weaponSlots = new();
+    public GameObject itemSlot;
 
-    [Button("Test InitializeItemSlotList")]
-    public void _testInitItemSlotList() => testInitItemSlotList();
+    [Button("Instantiate Slots")]
+    public void _instantiateSlots() => instantiateSlots();
 
-    private void testInitItemSlotList()
-    {
-        hotbar.Clear();
-        armorSlots.Clear();
-        itemSlots.Clear();
-        weaponSlots.Clear();
+    [Button("Clear Slots")]
+    public void _clearSlots() => removeSlots();
 
-        initializeItemSlotList(hotbar, hotbarGO);
-        initializeItemSlotList(armorSlots, armorSlotsGO);
-        initializeItemSlotList(itemSlots, itemSlotsGO);
-        initializeItemSlotList(weaponSlots, weaponSlotsGO);
-    }
+    [Button("hide slots")]
+    public void _hideSlots() => switchVisibilitySlots(false);
+
+    [Button("show slots")]
+    public void _showSlots() => switchVisibilitySlots(true);
 
     void Start()
     {
-        initializeItemSlotList(hotbar, hotbarGO);
-        initializeItemSlotList(armorSlots, armorSlotsGO);
-        initializeItemSlotList(itemSlots, itemSlotsGO);
-        initializeItemSlotList(weaponSlots, weaponSlotsGO);
+        instantiateSlots();
     }
 
-    public void initializeItemSlotList(List<ItemSlot> itemSlots, GameObject gameObject)
+    public void instantiateSlots()
     {
-        foreach (ItemSlot itemSlot in gameObject.GetComponentsInChildren<ItemSlot>())
+        for (int i = 0; i < inventorySlots; i++)
         {
-            itemSlots.Add(itemSlot);
+            Instantiate(itemSlot, transform);
+        }
+    }
+
+    public void removeSlots()
+    {
+        foreach (Transform child in transform)
+        {
+            if (Application.isPlaying)
+                Destroy(child.gameObject);
+            else
+                DestroyImmediate(child.gameObject);
+        }
+    }
+
+    public void switchVisibilitySlots(bool state)
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(state);
         }
     }
 }

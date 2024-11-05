@@ -8,12 +8,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
 
     [SerializeField] List<GameObject> hideOnDrag;
-    [SerializeField] List<Image> disableRaycastOnDrag;
+    [SerializeField] List<Graphic> disableRaycastOnDrag;
 
     [HideInInspector] public Transform parentAfterDrag;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log(eventData.pointerDrag.name);
+
         parentAfterDrag = transform.parent;
 
         foreach (var obj in hideOnDrag)
@@ -40,7 +42,5 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         foreach (var item in disableRaycastOnDrag)
             item.raycastTarget = true;
-
-
     }
 }

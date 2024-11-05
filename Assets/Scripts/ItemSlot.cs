@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using EditorAttributes;
-using Microsoft.Unity.VisualStudio.Editor;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 // das item was man aufhebt sollte ein interface sein welches die Daten zurückliefert die man braucht
@@ -13,18 +7,26 @@ using UnityEngine.EventSystems;
 
 public class ItemSlot : MonoBehaviour, IDropHandler
 {
-    public Item currentItem;
+    public Item getCurrentItem()
+    {
+        return GetComponentInChildren<Item>();
+    }
+
+    public void setCurrentItem(Item item)
+    {
+        GetComponentInChildren<Item>().setItem(item.itemData);
+    }
 
     public GameObject itemDisplayPrefab;
 
-    public bool isEmpty => currentItem == null;
+    public bool isEmpty => getCurrentItem() == null;
 
     public bool setItem(Item item)
     {
         if (!isEmpty)
             return false;
 
-        currentItem = item;
+        setCurrentItem(item);
         updateData();
         return true;
     }
@@ -34,7 +36,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         if (isEmpty)
             return false;
 
-        currentItem = null;
+        setCurrentItem(null);
         updateData();
         return true;
     }
@@ -54,20 +56,24 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     public void updateData()
     {
-        currentItem?.text?.SetText(currentItem.itemData.name);
+        getCurrentItem()?.text?.SetText(getCurrentItem().itemData.name);
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
-        DraggableItem draggableItem = dropped.GetComponent<DraggableItem>();
+        Item droppedItem = dropped.GetComponent<Item>();
 
+        Debug.LogWarning("help");
+
+        if (transform.childCount != 0)
+            return;
+
+        DraggableItem draggableItem = dropped.GetComponent<DraggableItem>();
         draggableItem.parentAfterDrag = transform;
 
-
-
-
-        Instantiate(itemDisplayPrefab, transform);
+        // Instantiate(itemDisplayPrefab, transform);
+        Debug.Log(droppedItem.name);
+        removeItem();
     }
-
 }

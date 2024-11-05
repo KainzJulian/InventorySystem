@@ -20,4 +20,25 @@ public class Item : MonoBehaviour
     {
 
     }
+
+    public void setItem(ItemData itemData)
+    {
+        if (itemData == null)
+            removeItem();
+        else
+            this.itemData = itemData;
+    }
+
+    public void setItem(Item item)
+    {
+        if (item == null)
+            removeItem();
+        else
+            itemData = item.itemData;
+    }
+
+    public void removeItem()
+    {
+        this.itemData = null;
+    }
 }
