@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public GameObject itemSlotPrefab;
 
-    public int inventorySlots;
-
-    public GameObject itemSlot;
+    public int inventorySlots = 10;
+    public List<ItemSlot> itemSlots = new List<ItemSlot>();
 
     [Button("Instantiate Slots")]
     public void _instantiateSlots() => instantiateSlots();
@@ -32,19 +32,22 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < inventorySlots; i++)
         {
-            Instantiate(itemSlot, transform);
+            GameObject itemSlot = Instantiate(itemSlotPrefab, transform);
+            itemSlots.Add(itemSlot.GetComponent<ItemSlot>());
         }
     }
 
     public void removeSlots()
     {
-        foreach (Transform child in transform)
+        foreach (ItemSlot item in itemSlots)
         {
             if (Application.isPlaying)
-                Destroy(child.gameObject);
+                Destroy(item.gameObject);
             else
-                DestroyImmediate(child.gameObject);
+                DestroyImmediate(item.gameObject);
         }
+
+        itemSlots.Clear();
     }
 
     public void switchVisibilitySlots(bool state)

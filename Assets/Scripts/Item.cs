@@ -9,24 +9,9 @@ public class Item : MonoBehaviour
 
     public TextMeshProUGUI text;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void setItem(ItemData itemData)
-    {
-        if (itemData == null)
-            removeItem();
-        else
-            this.itemData = itemData;
+        updateData();
     }
 
     public void setItem(Item item)
@@ -34,11 +19,19 @@ public class Item : MonoBehaviour
         if (item == null)
             removeItem();
         else
-            itemData = item.itemData;
+            this.itemData = item.itemData;
+
+        updateData();
+    }
+
+    public void updateData()
+    {
+        text?.SetText(itemData.name);
     }
 
     public void removeItem()
     {
         this.itemData = null;
+        updateData();
     }
 }

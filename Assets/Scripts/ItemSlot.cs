@@ -7,27 +7,24 @@ using UnityEngine.EventSystems;
 
 public class ItemSlot : MonoBehaviour, IDropHandler
 {
-    public Item getCurrentItem()
-    {
-        return GetComponentInChildren<Item>();
-    }
-
-    public void setCurrentItem(Item item)
-    {
-        GetComponentInChildren<Item>().setItem(item.itemData);
-    }
 
     public GameObject itemDisplayPrefab;
 
-    public bool isEmpty => getCurrentItem() == null;
+    public bool isEmpty => getCurrentItem == null;
+
+    public Item getCurrentItem => GetComponentInChildren<Item>();
+
+    public void setCurrentItem(Item item)
+    {
+        item.setItem(item);
+    }
 
     public bool setItem(Item item)
     {
         if (!isEmpty)
             return false;
 
-        setCurrentItem(item);
-        updateData();
+        getCurrentItem.setItem(item);
         return true;
     }
 
@@ -36,8 +33,8 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         if (isEmpty)
             return false;
 
-        setCurrentItem(null);
-        updateData();
+        getCurrentItem.setItem(null);
+
         return true;
     }
 
@@ -46,17 +43,13 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     private void testSetItem()
     {
-        setItem(GetComponentInChildren<Item>());
+        if (isEmpty)
+            Instantiate(itemDisplayPrefab, transform);
     }
 
     private void Start()
     {
         setItem(GetComponentInChildren<Item>());
-    }
-
-    public void updateData()
-    {
-        getCurrentItem()?.text?.SetText(getCurrentItem().itemData.name);
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -73,7 +66,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         draggableItem.parentAfterDrag = transform;
 
         // Instantiate(itemDisplayPrefab, transform);
-        Debug.Log(droppedItem.name);
-        removeItem();
+        Destroy(getCurrentItem);
     }
 }
